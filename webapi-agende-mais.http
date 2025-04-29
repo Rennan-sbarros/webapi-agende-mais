@@ -1,0 +1,6 @@
+@webapi_agende_mais_HostAddress = http://localhost:5079
+
+GET {{webapi_agende_mais_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
