@@ -17,10 +17,10 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restaurar dependências
-      run: dotnet restore
+      run: dotnet restore webapi-agende-mais.csproj
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build webapi-agende-mais.csproj --configuration Release --no-restore
 
     - name: Testes (opcional)
       run: dotnet test --no-build --verbosity normal
