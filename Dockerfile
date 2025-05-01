@@ -3,13 +3,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copiar arquivos do projeto
-COPY . ./
+COPY . /app
 
 # Restaurar dependências
-RUN dotnet restore
+RUN dotnet restore webapi-agende-mais.csproj
 
 # Compilar o projeto
-RUN dotnet publish -c Release -o /out
+RUN dotnet publish webapi-agende-mais.csproj -c Release -o /out
 
 # Etapa 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
