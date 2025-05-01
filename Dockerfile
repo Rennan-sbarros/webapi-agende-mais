@@ -2,11 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copiar arquivos do projeto
-COPY ./src /app
+# Copiar o arquivo .csproj para o container
+COPY webapi-agende-mais.csproj ./
 
 # Restaurar dependências
 RUN dotnet restore webapi-agende-mais.csproj
+
+# Copiar o restante do código para o container
+COPY ./src ./src
 
 # Compilar o projeto
 RUN dotnet publish webapi-agende-mais.csproj -c Release -o /out
