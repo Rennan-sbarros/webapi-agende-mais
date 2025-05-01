@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copiar arquivos do projeto
-COPY . /app
+COPY ./src /app
 
 # Restaurar dependências
 RUN dotnet restore webapi-agende-mais.csproj
