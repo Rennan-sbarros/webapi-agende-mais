@@ -9,8 +9,7 @@ var connectionString = $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST"
                        $"Port={Environment.GetEnvironmentVariable("MYSQL_PORT")};" +
                        $"Database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")};" +
                        $"User={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
-                       $"Password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
-                       "SslMode=Required;TrustServerCertificate=True;";
+                       $"Password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};";
 
 // Teste de conexão
 try
