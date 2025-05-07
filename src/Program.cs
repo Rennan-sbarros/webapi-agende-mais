@@ -1,9 +1,36 @@
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
+using System;
+using webapi_agende_mais.src.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connectionString = $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
+                       $"Port={Environment.GetEnvironmentVariable("MYSQL_PORT")};" +
+                       $"Database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")};" +
+                       $"User={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
+                       $"Password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
+                       "SslMode=Required;TrustServerCertificate=True;";
+
+// Teste de conexão
+try
+{
+    using var connection = new MySqlConnection(connectionString);
+    connection.Open();
+    Console.WriteLine("Conexão com o banco de dados bem-sucedida!");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Erro ao conectar ao banco de dados: {ex.Message}");
+    return; 
+}
+
+// Configuração do DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 32)))
+           .LogTo(Console.WriteLine, LogLevel.Information));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
