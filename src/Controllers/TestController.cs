@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+Ôªøusing Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapi_agende_mais.src.Repositories;
 
@@ -20,11 +20,16 @@ namespace webapi_agende_mais.src.Controllers
         {
             try
             {
-                // Obter a conex„o subjacente do banco de dados
-                var connection = _context.Database.GetDbConnection();
-                connection.Open(); // Abrir a conex„o
-                connection.Close(); // Fechar a conex„o
-                return Ok("Conex„o com o banco de dados bem-sucedida!");
+                // Testa a conex√£o com o banco de dados
+                var canConnect = _context.Database.CanConnect();
+                if (canConnect)
+                {
+                    return Ok("Conex√£o com o banco de dados bem-sucedida!");
+                }
+                else
+                {
+                    return StatusCode(500, "N√£o foi poss√≠vel conectar ao banco de dados.");
+                }
             }
             catch (Exception ex)
             {
