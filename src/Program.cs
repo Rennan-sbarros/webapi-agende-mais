@@ -1,34 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
-using System;
-using webapi_agende_mais.src.Repositories;
+using webapi_agende_mais.src.Data;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var connectionString = $"Server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
-                       $"Port={Environment.GetEnvironmentVariable("MYSQL_PORT")};" +
-                       $"Database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")};" +
-                       $"User={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
-                       $"Password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};";
-
-// Teste de conexão
-try
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
-    using var connection = new MySqlConnection(connectionString);
-    connection.Open();
-    Console.WriteLine("Conexão com o banco de dados bem-sucedida!");
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Erro ao conectar ao banco de dados: {ex.Message}");
-    return; 
-}
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    Args = args
+});
 
-// Configuração do DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 32)))
-           .LogTo(Console.WriteLine, LogLevel.Information));
-
+builder.Configuration
+    .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "src"))
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -52,6 +33,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -66,8 +52,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8000";
-app.Urls.Add($"http://*:{port}");
 
 app.Run();

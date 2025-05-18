@@ -26,7 +26,7 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 COPY --from=build /out .
 
 # Expor a porta da aplicação
-EXPOSE 8000
+EXPOSE 80
 
 # Comando para iniciar a aplicação
 ENTRYPOINT ["dotnet", "webapi-agende-mais.dll"]
